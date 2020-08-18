@@ -1,5 +1,6 @@
 package com.angus.calculator
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -39,6 +40,19 @@ class MainActivity : AppCompatActivity() {
 
             override fun onBindViewHolder(holder: GameHolder, position: Int) {
                 holder.game.text = gameTypes[position]
+                holder.game.setOnClickListener {
+                    when(position){
+                        0 ->{
+                            startActivity(Intent(this@MainActivity, CaculatorActivity::class.java))
+                        }
+                        1 -> {
+                            startActivity(Intent(this@MainActivity, GuessActivity::class.java))
+                        }
+                        2 -> {
+                            startActivity(Intent(this@MainActivity, SecretActivity::class.java))
+                        }
+                    }
+                }
             }
 
         }
