@@ -15,6 +15,10 @@ import java.util.ArrayList
 
 class CaculatorActivity : AppCompatActivity(){
 
+    private var isOperation: Boolean = false
+    private var operation: String = ""
+    private var outputNumber1: Int = 0
+    private var outputNumber2: Int = 0
     private lateinit var buttons: MutableList<NumberButton>
     private lateinit var numberIndex: ArrayList<Int>
     private lateinit var calculatorContent: ArrayList<String>
@@ -44,7 +48,7 @@ class CaculatorActivity : AppCompatActivity(){
                 button.isNumber = true
             }
             buttons.add(button)
-//            Log.d(TAG, "buttons: ${buttons[i].isNumber}")
+//            Log.d(TAG, "buttons: ${buttons[i].position}")
         }
         recycler.layoutManager = GridLayoutManager(this@CaculatorActivity, 4)
         recycler.setHasFixedSize(true)
@@ -58,30 +62,87 @@ class CaculatorActivity : AppCompatActivity(){
 
             override fun onBindViewHolder(holder: CalculatorHolder, position: Int) {
                 holder.button.text = buttons.get(position).content
-                Log.d(TAG, "content: ${buttons.get(position).content}")
+//                Log.d(TAG, "content: ${buttons.get(position).content}")
                 holder.button.isSelected = !buttons.get(position).isNumber
                 holder.button.position = buttons.get(position).position
                 holder.button.setOnClickListener{
-                    var outputNumber : Int
                     var number  = (it as NumberButton)
-                    Log.d(TAG, "number: ${number.isNumber} ${number.content} ${number.position}")
+                    Log.d(TAG, "number: ${number.isNumber} ${number.text} ${number.position}")
                     when ((it as NumberButton).position){
+                        in 0..1 -> {
+                            msg.clear()
+                            displayView.text = "0"
+                        }
+                        2 -> {
+                          outputNumber1 = msg.toString().toInt()
+                            msg.clear()
+                            operation = "%"
+                            displayView.text = "%"
+//                            isOperation = true
+                        }
+                        3 -> {
+                            outputNumber1 = msg.toString().toInt()
+                            msg.clear()
+                            operation = "/"
+                            displayView.text = "/"
+
+//                            isOperation = true
+                        }
                         in 4..6 -> {
-                            msg.append(it.content)
+                            msg.append(it.text.toString())
                             displayView.text = msg.toString()
-                            Log.d(TAG, "msg: ${it.content}")
+                        }
+                        7 -> {
+                            outputNumber1 = msg.toString().toInt()
+                            msg.clear()
+                            operation = "*"
+                            displayView.text = "*"
+//                            isOperation = true
                         }
                         in 8..10-> {
-                            msg.append(it.content)
+                            msg.append(it.text.toString())
                             displayView.text = msg.toString()
+                        }
+                        11 -> {
+                            outputNumber1 = msg.toString().toInt()
+                            msg.clear()
+                            operation = "-"
+                            displayView.text = "-"
+//                            isOperation = true
                         }
                         in 12..14-> {
-                            msg.append(it.content)
+                            msg.append(it.text.toString())
                             displayView.text = msg.toString()
                         }
+                        15 -> {
+                            outputNumber1 = msg.toString().toInt()
+                            msg.clear()
+                            operation = "+"
+                            displayView.text = "+"
+
+//                            isOperation = true
+                        }
                         in 16..18->{
-                            msg.append(it.content)
+                            msg.append(it.text.toString())
                             displayView.text = msg.toString()
+                        }
+                        19 -> {
+                            outputNumber2 = msg.toString().toInt()
+                            msg.clear()
+                            Log.d(TAG, "output:${outputNumber1} ${outputNumber2}");
+                            var result = 0
+                            if (operation == "%"){
+                                result = outputNumber1 % outputNumber2
+                            }else if (operation == "/"){
+                                result = outputNumber1 / outputNumber2
+                            }else if (operation == "*"){
+                                result = outputNumber1 * outputNumber2
+                            }else if (operation == "-"){
+                                result = outputNumber1 - outputNumber2
+                            }else if (operation == "+"){
+                                result = outputNumber1 + outputNumber2
+                            }
+                            displayView.text = result.toString()
                         }
                     }
                 }
