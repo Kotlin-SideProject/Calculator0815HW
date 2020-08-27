@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/button"
-        class="com.angus.calculator.CalButton"
+        class="com.angus.calculator.CalculatorButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"

@@ -19,7 +19,7 @@ class CaculatorActivity : AppCompatActivity(){
     private var operation: String = ""
     private var outputNumber1: Int = 0
     private var outputNumber2: Int = 0
-    private lateinit var buttons: MutableList<NumberButton>
+    private lateinit var buttons: MutableList<CalculatorButton>
     private lateinit var numberIndex: ArrayList<Int>
     private lateinit var calculatorContent: ArrayList<String>
     var msg = StringBuilder()
@@ -39,15 +39,21 @@ class CaculatorActivity : AppCompatActivity(){
                 "0", "00", ".", "=")
         numberIndex = arrayListOf<Int>(4, 5, 6, 8, 9, 10, 12, 13, 14, 16, 17, 18)
         //setting content
-        buttons = mutableListOf<NumberButton>()
+        buttons = mutableListOf<CalculatorButton>()
         for (i in 0..19){
-            val button = NumberButton(this)
-            button.content = calculatorContent.get(i)
-            button.position = i
             if (numberIndex.contains(i)){
-                button.isNumber = true
+                val button = OperandButton(this)
+                button.content = calculatorContent.get(i)
+                button.position = i
+                buttons.add(button)
+                Log.d(TAG, "isNumber: ${button.isNumber}")
+            }else{
+                val button = OperatorButton(this)
+                button.content = calculatorContent.get(i)
+                button.position = i
+                buttons.add(button)
             }
-            buttons.add(button)
+
 //            Log.d(TAG, "buttons: ${buttons[i].position}")
         }
         recycler.layoutManager = GridLayoutManager(this@CaculatorActivity, 4)
@@ -66,9 +72,9 @@ class CaculatorActivity : AppCompatActivity(){
                 holder.button.isSelected = !buttons.get(position).isNumber
                 holder.button.position = buttons.get(position).position
                 holder.button.setOnClickListener{
-                    var number  = (it as NumberButton)
+                    var number  = (it as CalculatorButton)
                     Log.d(TAG, "number: ${number.isNumber} ${number.text} ${number.position}")
-                    when ((it as NumberButton).position){
+                    when ((it as CalculatorButton).position){
                         in 0..1 -> {
                             msg.clear()
                             displayView.text = "0"
@@ -158,7 +164,7 @@ class CaculatorActivity : AppCompatActivity(){
     }
 
     class CalculatorHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        lateinit var button : NumberButton
+        lateinit var button : CalculatorButton
         init {
             button = itemView.findViewById(R.id.button2)
         }
